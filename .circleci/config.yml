@@ -7,7 +7,7 @@ jobs:
     docker:
       - image: cimg/base:stable
         environment:
-          PLATFORM: linux/amd64,linux/arm64,linux/arm
+          PLATFORM: linux/amd64,linux/arm64
           SLACK_DEFAULT_CHANNEL: ${SLACK_CHANNEL_PARQUET_TOOLS}
     steps:
       - checkout
