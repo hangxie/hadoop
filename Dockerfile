@@ -17,7 +17,8 @@ RUN echo fixing arm build \
        done \
     && echo install dependencies \
     && apt-get update -qq \
-    && DEBIAN_FRONTEND=noninteractive apt-get -y -qq install curl tar sudo openssh-server rsync openjdk-11-jdk \
+    && DEBIAN_FRONTEND=noninteractive apt-get -y -qq install nscd sssd-tools curl tar sudo openssh-server rsync ca-certificates \
+    && DEBIAN_FRONTEND=noninteractive apt-get -y -qq install openjdk-11-jdk \
     && echo configure ssh \
     && ssh-keygen -q -N "" -t rsa -f /root/.ssh/id_rsa \
     && cp /root/.ssh/id_rsa.pub /root/.ssh/authorized_keys \
