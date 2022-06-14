@@ -7,12 +7,12 @@ jobs:
     docker:
       - image: cimg/base:stable
         environment:
-          PLATFORM: linux/amd64,linux/arm64
+          PLATFORM: linux/amd64,linux/arm64,linux/arm
           SLACK_DEFAULT_CHANNEL: ${SLACK_CHANNEL_PARQUET_TOOLS}
     steps:
       - checkout
       - setup_remote_docker:
-          version: 19.03.14
+          version: 20.10.14
       - run:
           name: Build and push to docker hub
           no_output_timeout: 60m
@@ -20,16 +20,31 @@ jobs:
             echo "${DOCKER_HUB_TOKEN}" | docker login -u hangxie --password-stdin
             echo "${GITHUB_TOKEN}" | docker login -u baldemort-bot --password-stdin ghcr.io
             export DOCKER_CLI_EXPERIMENTAL=enabled
+            docker run --privileged --rm tonistiigi/binfmt --install all
             docker context create multi-platform
             docker buildx create multi-platform --platform ${PLATFORM} --use
-            docker buildx build --progress plain \
-                -f Dockerfile --push \
-                --platform ${PLATFORM} \
-                -t hangxie/hadoop-all-in-one:${CIRCLE_TAG} \
-                -t hangxie/hadoop-all-in-one:latest \
-                -t ghcr.io/hangxie/hadoop-all-in-one:${CIRCLE_TAG} \
-                -t ghcr.io/hangxie/hadoop-all-in-one:latest \
-                .
+            if [ -z ${CIRCLE_TAG+x} ]; then
+                export CIRCLE_TAG=cci-test
+                docker buildx build \
+                    --progress plain \
+                    --push \
+                    -f Dockerfile \
+                    --platform ${PLATFORM} \
+                    -t hangxie/hadoop-all-in-one:${CIRCLE_TAG} \
+                    -t ghcr.io/hangxie/hadoop-all-in-one:${CIRCLE_TAG} \
+                    .
+            else
+                docker buildx build \
+                    --progress plain \
+                    --push \
+                    -f Dockerfile \
+                    --platform ${PLATFORM} \
+                    -t hangxie/hadoop-all-in-one:${CIRCLE_TAG} \
+                    -t hangxie/hadoop-all-in-one:latest \
+                    -t ghcr.io/hangxie/hadoop-all-in-one:${CIRCLE_TAG} \
+                    -t ghcr.io/hangxie/hadoop-all-in-one:latest \
+                    .
+            fi
       - slack/notify:
           event: fail
           template: basic_fail_1
@@ -58,9 +73,7 @@ workflows:
   main:
     jobs:
       - publish-docker-image:
-          context: default
+          context: parquet-tools
           filters:
-            branches:
-              ignore: /.*/
             tags:
               only: /^v\d+\.\d+\.\d+$/
