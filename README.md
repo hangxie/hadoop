@@ -24,7 +24,8 @@ Services with HTTPS are off:
 
 ```
 docker run -d --rm --name hadoop \
-    -p 8042:8042 -p 8088:8088 \
+    -p 8030-8088:8030-8088 \
+    -p 9000:9000 \
     -p 9864-9870:9864-9870 \
     hangxie/hadoop-all-in-one
 ```
