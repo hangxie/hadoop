@@ -12,8 +12,8 @@ ENV YARN_CONF_DIR ${HADOOP_HOME}/etc/hadoop
 ARG DEBIAN_FRONTEND=noninteractive
 
 RUN echo install packages \
- && apt-get update \
- && apt-get -y install ca-certificates curl tar sudo openssh-server rsync openjdk-11-jdk \
+ && apt-get -qq update \
+ && apt-get -qq -y install ca-certificates curl tar sudo openssh-server rsync openjdk-11-jdk \
  && echo configure ssh \
  && ssh-keygen -q -N "" -t rsa -f /root/.ssh/id_rsa \
  && cp /root/.ssh/id_rsa.pub /root/.ssh/authorized_keys \
