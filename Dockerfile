@@ -1,6 +1,6 @@
-FROM debian:11-slim
+FROM debian:12-slim
 
-ENV HADOOP_VERSION=3.3.3
+ENV HADOOP_VERSION=3.4.0
 ENV HADOOP_HOME /opt/hadoop-${HADOOP_VERSION}
 ENV HADOOP_COMMON_HOME ${HADOOP_HOME}
 ENV HADOOP_HDFS_HOME ${HADOOP_HOME}
@@ -13,7 +13,7 @@ ARG DEBIAN_FRONTEND=noninteractive
 
 RUN echo install packages \
  && apt-get -qq update \
- && apt-get -qq -y install ca-certificates curl tar sudo openssh-server rsync openjdk-11-jdk \
+ && apt-get -qq -y install ca-certificates curl tar sudo openssh-server rsync openjdk-17-jdk \
  && echo configure ssh \
  && ssh-keygen -q -N "" -t rsa -f /root/.ssh/id_rsa \
  && cp /root/.ssh/id_rsa.pub /root/.ssh/authorized_keys \
