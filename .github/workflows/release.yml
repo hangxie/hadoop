@@ -35,6 +35,4 @@ jobs:
                 --platform ${{ env.PLATFORM }} \
                 -t ${{ secrets.DOCKER_USERNAME }}/hadoop-all-in-one:${{ env.REL_TAG }} \
                 -t ${{ secrets.DOCKER_USERNAME }}/hadoop-all-in-one:latest \
-                -t ghcr.io/hangxie/hadoop-all-in-one:${{ env.REL_TAG }} \
-                -t ghcr.io/hangxie/hadoop-all-in-one:latest \
                 .
