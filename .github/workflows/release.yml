@@ -33,8 +33,8 @@ jobs:
             docker buildx build --progress plain \
                 -f package/container/Dockerfile --push \
                 --platform ${{ env.PLATFORM }} \
-                -t hangxie/hadoop-all-in-one:${{ env.REL_TAG }} \
-                -t hangxie/hadoop-all-in-one:latest \
+                -t ${{ secrets.DOCKER_USERNAME }}/hadoop-all-in-one:${{ env.REL_TAG }} \
+                -t ${{ secrets.DOCKER_USERNAME }}/hadoop-all-in-one:latest \
                 -t ghcr.io/hangxie/hadoop-all-in-one:${{ env.REL_TAG }} \
                 -t ghcr.io/hangxie/hadoop-all-in-one:latest \
                 .
