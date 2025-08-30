@@ -1,6 +1,6 @@
-FROM debian:12-slim
+FROM debian:13-slim
 
-ENV HADOOP_VERSION=3.4.1
+ENV HADOOP_VERSION=3.4.2
 ENV HADOOP_HOME /opt/hadoop-${HADOOP_VERSION}
 ENV HADOOP_COMMON_HOME ${HADOOP_HOME}
 ENV HADOOP_HDFS_HOME ${HADOOP_HOME}
@@ -13,16 +13,16 @@ ARG DEBIAN_FRONTEND=noninteractive
 
 RUN echo install packages \
  && apt-get -qq update \
- && apt-get -qq -y install ca-certificates curl tar sudo openssh-server rsync openjdk-17-jdk \
+ && apt-get -qq -y install ca-certificates curl tar sudo openssh-server rsync openjdk-21-jdk \
  && echo configure ssh \
  && ssh-keygen -q -N "" -t rsa -f /root/.ssh/id_rsa \
  && cp /root/.ssh/id_rsa.pub /root/.ssh/authorized_keys \
  && chmod 0600 /root/.ssh/authorized_keys \
  && echo install Hapdoop \
  && cd /opt \
- && curl -sLO https://dlcdn.apache.org/hadoop/common/hadoop-${HADOOP_VERSION}/hadoop-${HADOOP_VERSION}.tar.gz \
- && tar zxf hadoop-${HADOOP_VERSION}.tar.gz \
- && rm hadoop-${HADOOP_VERSION}.tar.gz \
+ && curl -sLO https://dlcdn.apache.org/hadoop/common/hadoop-${HADOOP_VERSION}/hadoop-${HADOOP_VERSION}-lean.tar.gz \
+ && tar zxf hadoop-${HADOOP_VERSION}-lean.tar.gz \
+ && rm hadoop-${HADOOP_VERSION}-lean.tar.gz \
  && rm -rf ${HADOOP_HOME}/share/doc ${HADOOP_HOME}/lib/native \
  && echo configure Hadoop \
  && java -XshowSettings:properties -version 2>&1 | grep java.home | awk '{print "export JAVA_HOME="$3}' >> $HADOOP_HOME/etc/hadoop/hadoop-env.sh \
